@@ -5,11 +5,18 @@
 """
 
 import json
-
+import os
 import httpx
 import streamlit as st
 
-BACKEND_URL = "http://127.0.0.1:8000"
+try:
+    _backend_url_secret = st.secrets.get("BACKEND_URL")
+except Exception:
+    _backend_url_secret = None
+
+BACKEND_URL = _backend_url_secret or os.environ.get(
+    "BACKEND_URL", "http://127.0.0.1:8000"
+)
 
 # httpx 기본 타임아웃은 5초다. 배포한 서버는 깨어나는 데 그보다 오래 걸리기도 한다.
 HTTP_TIMEOUT = 60
